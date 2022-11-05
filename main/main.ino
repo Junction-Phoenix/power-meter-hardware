@@ -2,6 +2,7 @@
 #include <HTTPClient.h>
 
 
+
 const char* ssid = "ppp";                 // random for now
 const char* password = "pailius12345678"; // random for now
 const int device_id = 4;
@@ -13,12 +14,13 @@ unsigned long last_time = 0;
 
 String server_name = "https://power-manager-api.herokuapp.com";
 String get_state = "/devices/state/4";
-String post_data = "/devices/consumption/";
+String post_data = "https://power-manager-api.herokuapp.com/devices/consumption/";
 String payload;
-
 
 int state = 0;
 int int_payload;
+
+int consumption_value = 5;
 
 void setup()
 {
@@ -78,14 +80,23 @@ void loop()
               Serial.println(httpResponseCode);
           }
         
-        
+//        int httpResponseCode = http.POST("{\"device_id\":4, \"consumption\":" + consumption_value + "}");
+//        Serial.println(httpResponseCode);
         http.end();
+        
+        http.begin(post_data.c_str());
+        String json = "{\"device_id\": 4, \"consumption\": " + String(consumption_value) + "}";
+        Serial.println(json);//
+        httpResponseCode = http.POST(json);
+        Serial.println(httpResponseCode);
+        
       }else{
         Serial.println("Wifi disconnected");
       }
       
       last_time = millis();
     }
+
    
     
     delay(5000);//
