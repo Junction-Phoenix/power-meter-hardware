@@ -8,6 +8,7 @@ const char* password = "pailius12345678"; // random for now
 const int device_id = 4;
 
 const int relay = 19;
+const int led = 26;
 
 unsigned long timer = 5000; // 5 seconds
 unsigned long last_time = 0;
@@ -25,6 +26,7 @@ int consumption_value = 5;
 void setup()
 {
     pinMode(relay, OUTPUT);
+    pinMode(led, OUTPUT);
     
     Serial.begin(115200);
     WiFi.begin(ssid, password);
@@ -44,10 +46,12 @@ void check_relay_state(String state){
   if (state == "1"){
      // if true (1), then appliance can work
     digitalWrite(relay, HIGH);
+    digitalWrite(led, HIGH);
     Serial.println("relay HIGH");
     }
   else{
     digitalWrite(relay, LOW);
+    digitalWrite(led, LOW);
     Serial.println("relay LOW");
       }
 }
@@ -71,10 +75,12 @@ void loop()
               if (payload.equals("\"1\"")){
                 Serial.println("Relay HIGH");
                 digitalWrite(relay, HIGH);
+                digitalWrite(led, HIGH);
               }
               if (payload.equals("\"0\"")){
                 Serial.println("Relay LOW");
                 digitalWrite(relay, LOW);
+                digitalWrite(led, LOW);
               }
               delay(50);
               Serial.println(httpResponseCode);
